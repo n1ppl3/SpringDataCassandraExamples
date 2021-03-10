@@ -11,21 +11,41 @@
 	<groupId>ru.n1ppl3</groupId>
 	<artifactId>SpringDataCassandraExamples</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
+
 	<name>SpringDataCassandraExamples</name>
 	<description>Demo project for Spring Boot Data Cassandra</description>
+
 	<properties>
+		<!-- https://github.com/jsevellec/cassandra-unit/issues/283 -->
 		<java.version>1.8</java.version>
 	</properties>
+
 	<dependencies>
+		<!-- COMPILE -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-cassandra</artifactId>
 		</dependency>
-
+		<!-- TEST -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.cassandraunit/cassandra-unit-spring -->
+		<dependency>
+			<groupId>org.cassandraunit</groupId>
+			<artifactId>cassandra-unit-spring</artifactId>
+			<version>4.3.1.0</version>
+			<scope>test</scope>
+			<exclusions>
+				<!-- неявно исключаем org.hibernate.validator:hibernate-validator, иначе будет: -->
+				<!-- java.lang.AbstractMethodError: org.hibernate.validator.internal.engine.ConfigurationImpl.getDefaultParameterNameProvider()Ljavax/validation/ParameterNameProvider -->
+				<exclusion>
+					<groupId>com.addthis.metrics</groupId>
+					<artifactId>reporter-config3</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 	</dependencies>
 
