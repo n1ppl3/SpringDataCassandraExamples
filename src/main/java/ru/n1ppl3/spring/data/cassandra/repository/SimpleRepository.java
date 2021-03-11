@@ -29,7 +29,7 @@ public class SimpleRepository implements AutoCloseable {
         this.cqlSession = cqlSession;
     }
 
-    private static CqlSession buildDefaultCqlSession() {
+    public static CqlSession buildDefaultCqlSession() {
         // uses defaults from application.conf file
         return CqlSession.builder()
             .withApplicationName("simple-repository")
