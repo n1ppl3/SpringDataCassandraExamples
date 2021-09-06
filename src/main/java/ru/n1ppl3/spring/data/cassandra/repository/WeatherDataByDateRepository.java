@@ -12,17 +12,11 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.UUID;
 
-import static ru.n1ppl3.spring.data.cassandra.repository.SimpleRepository.buildDefaultCqlSession;
-
 
 public class WeatherDataByDateRepository {
 
 
     private final CqlSession cqlSession;
-
-    public WeatherDataByDateRepository() {
-        this(buildDefaultCqlSession());
-    }
 
     public WeatherDataByDateRepository(@NonNull CqlSession cqlSession) {
         this.cqlSession = cqlSession;

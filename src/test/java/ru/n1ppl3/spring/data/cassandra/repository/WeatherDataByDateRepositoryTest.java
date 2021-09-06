@@ -2,19 +2,19 @@ package ru.n1ppl3.spring.data.cassandra.repository;
 
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
-import ru.n1ppl3.spring.data.cassandra.AbstractEmbeddedCassandraTest;
+import ru.n1ppl3.spring.data.cassandra.AbstractEmbeddedCassandraTestWithDefaultSession;
 import ru.n1ppl3.spring.data.cassandra.entity.WeatherDataByDate;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @Slf4j
-class WeatherDataByDateRepositoryTest extends AbstractEmbeddedCassandraTest {
+class WeatherDataByDateRepositoryTest extends AbstractEmbeddedCassandraTestWithDefaultSession {
 
-    private final WeatherDataByDateRepository repository = new WeatherDataByDateRepository();
+    private final WeatherDataByDateRepository repository = new WeatherDataByDateRepository(cqlSession);
 
     @Test
     void test() {

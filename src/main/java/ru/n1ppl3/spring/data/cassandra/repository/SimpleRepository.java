@@ -15,25 +15,15 @@ import org.springframework.lang.NonNull;
 
 import static ru.n1ppl3.spring.data.cassandra.utils.CassandraUtils.printResultSet;
 
-public class SimpleRepository implements AutoCloseable {
+
+public class SimpleRepository {
     private static final Logger logger = LoggerFactory.getLogger(SimpleRepository.class);
 
 
     private final CqlSession cqlSession;
 
-    public SimpleRepository() {
-        this(buildDefaultCqlSession());
-    }
-
     public SimpleRepository(@NonNull CqlSession cqlSession) {
         this.cqlSession = cqlSession;
-    }
-
-    public static CqlSession buildDefaultCqlSession() {
-        // uses defaults from application.conf file
-        return CqlSession.builder()
-            .withApplicationName("simple-repository")
-            .build();
     }
 
 
@@ -101,11 +91,4 @@ public class SimpleRepository implements AutoCloseable {
         printResultSet(rs);
     }
 
-    /**
-     *
-     */
-    @Override
-    public void close() {
-        cqlSession.close();
-    }
 }

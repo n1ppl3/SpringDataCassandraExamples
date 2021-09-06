@@ -1,12 +1,11 @@
 package ru.n1ppl3.spring.data.cassandra.repository;
 
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
-import ru.n1ppl3.spring.data.cassandra.AbstractEmbeddedCassandraTest;
+import ru.n1ppl3.spring.data.cassandra.AbstractEmbeddedCassandraTestWithDefaultSession;
 
-class SimpleRepositoryTest extends AbstractEmbeddedCassandraTest {
+class SimpleRepositoryTest extends AbstractEmbeddedCassandraTestWithDefaultSession {
 
-    private static final SimpleRepository simpleRepository = new SimpleRepository();
+    private static final SimpleRepository simpleRepository = new SimpleRepository(cqlSession);
 
     @Test
     void test1_printMetadata() {
@@ -33,8 +32,4 @@ class SimpleRepositoryTest extends AbstractEmbeddedCassandraTest {
         simpleRepository.preparedStatements();
     }
 
-    @AfterAll
-    static void afterAll() {
-        simpleRepository.close();
-    }
 }
