@@ -14,15 +14,20 @@ import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public abstract class CassandraUtils {
     private static final Logger logger = LoggerFactory.getLogger(CassandraUtils.class);
 
+    /**
+     *
+     */
     public static CqlSession buildDefaultCqlSession() {
         // uses defaults from application.conf file
         return CqlSession.builder()
@@ -85,6 +90,15 @@ public abstract class CassandraUtils {
             result.add(columnDefinition.getName());
         }
         return result;
+    }
+
+    /**
+     * Using the WRITETIME function in a SELECT statement returns the timestamp that the column was
+     * written to the database. The output of the function is microseconds.
+     * https://docs.datastax.com/en/dse/5.1/cql/cql/cql_using/useWritetime.html
+     */
+    public static long toEpochMicroseconds(Instant instant) {
+        return TimeUnit.SECONDS.toMicros(instant.getEpochSecond()) + TimeUnit.NANOSECONDS.toMicros(instant.getNano());
     }
 
 }
