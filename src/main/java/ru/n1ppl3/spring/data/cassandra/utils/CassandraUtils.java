@@ -23,6 +23,13 @@ import java.util.stream.Stream;
 public abstract class CassandraUtils {
     private static final Logger logger = LoggerFactory.getLogger(CassandraUtils.class);
 
+    public static CqlSession buildDefaultCqlSession() {
+        // uses defaults from application.conf file
+        return CqlSession.builder()
+            .withApplicationName("simple-repository")
+            .build();
+    }
+
     /**
      *
      */
@@ -31,9 +38,13 @@ public abstract class CassandraUtils {
         for (Path file : filesInDir) {
             logger.info("Gonna read {}", file);
             String content = new String(Files.readAllBytes(file));
-            logger.info("Gonna execute:\n{}", content);
-            ResultSet rs = cqlSession.execute(content);
-            logger.info("\n{} executed {}", file, rs.getExecutionInfo());
+            String[] statements = content.split(";");
+            int i = 1;
+            for (String statement: statements) {
+                logger.info("Gonna execute statement#{}:\n'{}'", i++, statement);
+                ResultSet rs = cqlSession.execute(statement);
+                logger.info("\n{} executed {}", file, rs.getExecutionInfo());
+            }
         }
     }
 

@@ -5,22 +5,19 @@ import com.datastax.oss.driver.api.core.cql.BoundStatement;
 import com.datastax.oss.driver.api.core.cql.PreparedStatement;
 import com.datastax.oss.driver.api.core.cql.ResultSet;
 import com.datastax.oss.driver.api.core.cql.Row;
-import org.springframework.lang.NonNull;
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import ru.n1ppl3.spring.data.cassandra.entity.WeatherDataByDate;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.UUID;
 
-
+@Slf4j
+@AllArgsConstructor
 public class WeatherDataByDateRepository {
 
-
     private final CqlSession cqlSession;
-
-    public WeatherDataByDateRepository(@NonNull CqlSession cqlSession) {
-        this.cqlSession = cqlSession;
-    }
 
 
     /**

@@ -12,3 +12,13 @@ WITH CLUSTERING ORDER BY (time DESC)
 AND default_time_to_live = 2592000 -- 30 days
 AND comment = 'weather station data'
 ;
+
+--
+CREATE TABLE my_keyspace.simple_data_table (
+    key bigint,
+    value text,
+    PRIMARY KEY ((key))
+)
+WITH default_time_to_live=31622400 -- 366×24×60×60
+AND comment = 'simple example table'
+;

@@ -9,22 +9,16 @@ import com.datastax.oss.driver.api.core.cql.Row;
 import com.datastax.oss.driver.api.core.cql.SimpleStatement;
 import com.datastax.oss.driver.api.core.cql.Statement;
 import com.datastax.oss.driver.api.core.metadata.Metadata;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.lang.NonNull;
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import static ru.n1ppl3.spring.data.cassandra.utils.CassandraUtils.printResultSet;
 
-
+@Slf4j
+@AllArgsConstructor
 public class SimpleRepository {
-    private static final Logger logger = LoggerFactory.getLogger(SimpleRepository.class);
-
 
     private final CqlSession cqlSession;
-
-    public SimpleRepository(@NonNull CqlSession cqlSession) {
-        this.cqlSession = cqlSession;
-    }
 
 
     /**
@@ -49,7 +43,7 @@ public class SimpleRepository {
      *
      */
     public void printServerTime() {
-        logger.info("Server time is {}", getServerDateTime());
+        log.info("Server time is {}", getServerDateTime());
     }
 
     public Object getServerDateTime() {
@@ -87,7 +81,7 @@ public class SimpleRepository {
         BoundStatement boundStatement = preparedStatement.bind("local")
             .setConsistencyLevel(ConsistencyLevel.LOCAL_ONE);
         ResultSet rs = cqlSession.execute(boundStatement);
-        logger.info("execInfo: {}", rs.getExecutionInfo());
+        log.info("execInfo: {}", rs.getExecutionInfo());
         printResultSet(rs);
     }
 
