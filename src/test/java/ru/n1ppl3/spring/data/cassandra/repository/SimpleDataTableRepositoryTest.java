@@ -6,6 +6,7 @@ import ru.n1ppl3.spring.data.cassandra.AbstractEmbeddedCassandraTestWithDefaultS
 import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.concurrent.TimeUnit;
 
 import static java.time.ZoneOffset.UTC;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -17,16 +18,16 @@ class SimpleDataTableRepositoryTest extends AbstractEmbeddedCassandraTestWithDef
     private final SimpleDataTableRepository simpleDataTableRepository = new SimpleDataTableRepository(cqlSession);
 
     @Test
+    void test_not_found() {
+        assertNull(simpleDataTableRepository.findValueByKey(-1L));
+    }
+
+    @Test
     void test_found() {
         Long key = 1L;
         String value = "One";
         simpleDataTableRepository.saveValueToKey(key, value);
         assertEquals(value, simpleDataTableRepository.findValueByKey(key));
-    }
-
-    @Test
-    void test_not_found() {
-        assertNull(simpleDataTableRepository.findValueByKey(-1L));
     }
 
     @Test
@@ -40,5 +41,18 @@ class SimpleDataTableRepositoryTest extends AbstractEmbeddedCassandraTestWithDef
         // более старое значение не перетрёт более свежее
         assertEquals(toEpochMicroseconds(after), simpleDataTableRepository.findValueWriteTime(key));
         assertEquals(value, simpleDataTableRepository.findValueByKey(key));
+    }
+
+    @Test
+    void test_ttl() throws InterruptedException {
+        Long key = 3L;
+        String value = "Three";
+        int ttl = 1;
+        simpleDataTableRepository.saveValueToKeyWithTtl(key, value, ttl);
+        System.out.println("TTL = " + simpleDataTableRepository.findValueTtl(key));
+        assertEquals(value, simpleDataTableRepository.findValueByKey(key));
+        Thread.sleep(TimeUnit.SECONDS.toMillis(ttl));
+        // ttl истекло, row исчез
+        assertNull(simpleDataTableRepository.findValueByKey(key));
     }
 }

@@ -39,6 +39,16 @@ public class SimpleDataTableRepository {
     }
 
     /**
+     * https://docs.datastax.com/en/cql-oss/3.3/cql/cql_using/useTTL.html
+     */
+    public Integer findValueTtl(Long key) {
+        ResultSet rs = cqlSession.execute("select ttl(value) as ttl from my_keyspace.simple_data_table where key = :key",
+            Collections.singletonMap("key", key));
+        Row row = rs.one();
+        return (row != null) ? row.getInt("ttl") : null;
+    }
+
+    /**
      *
      */
     public void saveValueToKey(Long key, String value) {
@@ -55,6 +65,16 @@ public class SimpleDataTableRepository {
         ResultSet rs = cqlSession.execute(cql, toEpochMicroseconds(writeTime), value, key);
         CassandraUtils.printResultSet(rs);
         System.out.println("Updated simple_data_table for $key with writeTime");
+    }
+
+    /**
+     * https://docs.datastax.com/en/cql-oss/3.3/cql/cql_using/useExpireExample.html
+     */
+    public void saveValueToKeyWithTtl(Long key, String value, int ttlInSeconds) {
+        String cql = "update my_keyspace.simple_data_table using TTL :ttl set value = :value where key = :key";
+        ResultSet rs = cqlSession.execute(cql, ttlInSeconds, value, key);
+        CassandraUtils.printResultSet(rs);
+        System.out.println("Updated simple_data_table for $key with TTL");
     }
 
 }
